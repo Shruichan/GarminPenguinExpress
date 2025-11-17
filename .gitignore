@@ -4,7 +4,4 @@ __pycache__/
 build/
 dist/
 packaging/tools/
-GarminPenguinExpress-Linux
-GarminPenguinExpress-*.AppImage
-garmin-penguin-express_*.deb
 *.spec
