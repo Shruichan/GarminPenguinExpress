@@ -1,0 +1,73 @@
+Metadata-Version: 2.4
+Name: garmin-penguin-express
+Version: 0.1.0
+Summary: A simple Garmin Express-like GUI for syncing music to Garmin wearables over GVFS/MTP
+Author: Codex
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: PyQt6>=6.6
+
+# Garmin Penguin Express
+
+Garmin Penguin Express is a desktop helper that recreates the "copy music" workflow of Garmin Express for Linux desktops. It guides you through mounting a Garmin wearable that exposes its storage over GVFS+MTP and then mirrors the contents of a selected source folder (typically `~/Music/Flacs_MP3`) into the watch's `Internal Storage/Music` directory using `gio` commands so we avoid the usual `cp`/`rsync` FUSE failures.
+
+## Features
+
+- PyQt6 UI with watch profile selector so each wearable remembers its preferred music library folder.
+- Buttons for every step of the proven `gio` workflow: reset lingering FUSE mounts, connect via `gio mount`, wipe the watch music folder, copy MP3 files, and unmount.
+- Real-time logging area so you can see the exact `gio` feedback without leaving the app.
+- Per-user config stored under `~/.config/GarminPenguinExpress/config.json`.
+- Works entirely through the GVFS stack, so it behaves exactly like the manual instructions you already validated.
+
+## Goals
+
+- Detect Garmin wearables that show up via GVFS' MTP backend.
+- Provide a friendly UI where each watch profile remembers its preferred library path.
+- Execute the safe `gio` operations (mount, list, remove, copy, unmount) behind buttons so you do not need to run shell scripts.
+- Offer a single-button "Sync" that wipes the watch's music folder and recopies the current MP3s.
+- Ship with instructions for producing a standalone executable via PyInstaller for distribution.
+
+## Getting Started
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -e .
+```
+
+Launch the UI:
+
+```bash
+python3 -m garmin_penguin_express
+```
+
+### Daily workflow
+
+1. Plug the watch in via USB and wait for it to appear in `gio mount -li`.
+2. Start Garmin Penguin Express, pick the watch profile you want to manage, and confirm the source folder path.
+3. Press **Mount via gio** so GVFS exposes `/run/user/$UID/gvfs/mtp:host=...`.
+4. Pick the detected GVFS mount from the combo box (if you only have one, it will auto-select).
+5. Use **Wipe Music** to clear the watch or **Sync** to wipe + copy your MP3s in one go.
+6. Press **Unmount** when you're done, then unplug the USB cable and check the watch's Music app.
+
+## Building a stand-alone executable (PyInstaller)
+
+```bash
+pip install pyinstaller
+pyinstaller --noconfirm --onefile --name GarminPenguinExpress src/garmin_penguin_express/__main__.py
+```
+
+The resulting binary will live under `dist/GarminPenguinExpress`. Copy it wherever you want. PyInstaller automatically bundles the Python runtime and PyQt so the target system only needs the standard `gio`/`gvfs` stack.
+
+## Limitations
+
+- You still need `gio`, `gvfsd-mtp`, and udev permissions already working under your user account.
+- The tool assumes MP3s are copied; FLAC or AAC will be treated the same if the device supports them.
+- Real Garmin Express performs metadata management and DRM checks; this helper only mirrors files.
+
+## Roadmap
+
+- Persist user source folders per watch profile.
+- Progress bars for each `gio copy` call.
+- Detection of multiple MTP endpoints with friendly naming via `gio info` and USB vendor parsing.

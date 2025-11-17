@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "garmin-penguin-express"
+version = "0.1.0"
+description = "A simple Garmin Express-like GUI for syncing music to Garmin wearables over GVFS/MTP"
+authors = [{ name = "Rome Drori(Shruichan)" }]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "PyQt6>=6.6",
+]
+
+[project.scripts]
+GarminPenguinExpress = "garmin_penguin_express.__main__:main"

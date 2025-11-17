@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+src/garmin_penguin_express/__init__.py
+src/garmin_penguin_express/__main__.py
+src/garmin_penguin_express/app.py
+src/garmin_penguin_express/config_store.py
+src/garmin_penguin_express/gio_utils.py
+src/garmin_penguin_express/gui.py
+src/garmin_penguin_express/sync_service.py
+src/garmin_penguin_express/watch_profiles.py
+src/garmin_penguin_express.egg-info/PKG-INFO
+src/garmin_penguin_express.egg-info/SOURCES.txt
+src/garmin_penguin_express.egg-info/dependency_links.txt
+src/garmin_penguin_express.egg-info/entry_points.txt
+src/garmin_penguin_express.egg-info/requires.txt
+src/garmin_penguin_express.egg-info/top_level.txt

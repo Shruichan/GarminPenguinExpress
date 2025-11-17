@@ -1,0 +1,2 @@
+[console_scripts]
+GarminPenguinExpress = garmin_penguin_express.__main__:main
