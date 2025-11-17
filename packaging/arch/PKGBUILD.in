@@ -1,0 +1,22 @@
+pkgname=garmin-penguin-express-bin
+pkgver=@VERSION@
+pkgrel=1
+pkgdesc="Garmin Express-style GVFS/MTP music sync helper"
+arch=('x86_64')
+depends=('gvfs' 'ffmpeg' 'python')
+provides=('garmin-penguin-express')
+conflicts=('garmin-penguin-express')
+license=('MIT')
+source=('GarminPenguinExpress'
+        'garmin-penguin-express.desktop'
+        'icon.png')
+noextract=('GarminPenguinExpress')
+sha256sums=('SKIP'
+            'SKIP'
+            'SKIP')
+
+package() {
+    install -Dm755 "$srcdir/GarminPenguinExpress" "$pkgdir/usr/bin/GarminPenguinExpress"
+    install -Dm644 "$srcdir/garmin-penguin-express.desktop" "$pkgdir/usr/share/applications/garmin-penguin-express.desktop"
+    install -Dm644 "$srcdir/icon.png" "$pkgdir/usr/share/icons/hicolor/256x256/apps/garmin-penguin-express.png"
+}

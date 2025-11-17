@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Garmin Penguin Express
+Exec=GarminPenguinExpress
+Icon=garmin-penguin-express
+Categories=AudioVideo;Utility;
+Terminal=false

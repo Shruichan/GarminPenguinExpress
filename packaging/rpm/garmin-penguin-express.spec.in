@@ -1,0 +1,33 @@
+Name:           garmin-penguin-express
+Version:        @VERSION@
+Release:        1%{?dist}
+Summary:        Garmin Express-style GVFS/MTP music sync tool
+License:        MIT
+URL:            https://github.com/yourname/GarminPenguinExpress
+Source0:        %{name}-%{version}.tar.gz
+BuildArch:      x86_64
+Provides:       garmin-penguin-express
+Requires:       gvfs, gvfs-fuse, ffmpeg
+
+%description
+Garmin Penguin Express mirrors the Garmin Express music workflow with a Linux-friendly PyQt UI. It mounts watches via GVFS/MTP, copies music using gio, and optionally converts tracks via ffmpeg.
+
+%prep
+%setup -q
+
+%build
+# No build step needed; binary provided.
+
+%install
+install -D -m 0755 GarminPenguinExpress %{buildroot}/usr/bin/GarminPenguinExpress
+install -D -m 0644 garmin-penguin-express.desktop %{buildroot}/usr/share/applications/garmin-penguin-express.desktop
+install -D -m 0644 icon.png %{buildroot}/usr/share/icons/hicolor/256x256/apps/garmin-penguin-express.png
+
+%files
+/usr/bin/GarminPenguinExpress
+/usr/share/applications/garmin-penguin-express.desktop
+/usr/share/icons/hicolor/256x256/apps/garmin-penguin-express.png
+
+%changelog
+* Tue Jul 23 2024 Garmin Penguin Express <noreply@example.com> - @VERSION@-1
+- Initial package

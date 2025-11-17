@@ -72,9 +72,12 @@ class FileBrowserWidget(QWidget):
     # UI construction -------------------------------------------------------
     def _build_ui(self) -> None:
         layout = QGridLayout()
-        layout.addWidget(self._build_local_panel(), 0, 0)
-        layout.addLayout(self._build_action_buttons(), 0, 1)
-        layout.addWidget(self._build_watch_panel(), 0, 2)
+        local_panel = self._build_local_panel()
+        watch_panel = self._build_watch_panel()
+        action_layout = self._build_action_buttons()
+        layout.addWidget(local_panel, 0, 0)
+        layout.addLayout(action_layout, 0, 1)
+        layout.addWidget(watch_panel, 0, 2)
         layout.setColumnStretch(0, 4)
         layout.setColumnStretch(1, 0)
         layout.setColumnStretch(2, 4)

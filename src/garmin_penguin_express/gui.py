@@ -50,10 +50,15 @@ class MainWindow(QMainWindow):
         self.watch_profiles = list(DEFAULT_WATCH_PROFILES)
         self.current_mounts: list[GVFSMount] = []
         self._task_running = False
+        self._last_mountable_uris: set[str] = set()
 
         self._build_ui()
         self._restore_watch_selection()
         QTimer.singleShot(500, self.refresh_devices)
+        self.device_monitor = QTimer(self)
+        self.device_monitor.setInterval(4000)
+        self.device_monitor.timeout.connect(self._auto_monitor_devices)
+        self.device_monitor.start()
 
     # UI helpers -----------------------------------------------------------------
     def _build_ui(self) -> None:
@@ -158,6 +163,7 @@ class MainWindow(QMainWindow):
             return
         self.preferences.last_selected_watch = profile.identifier
         save_preferences(self.preferences)
+        self.browser_widget.set_profile(profile)
 
     def _on_auto_convert_toggled(self, _state: int) -> None:
         self.preferences.auto_convert_to_mp3 = self.auto_convert_checkbox.isChecked()
@@ -213,6 +219,22 @@ class MainWindow(QMainWindow):
     def current_mount(self) -> GVFSMount | None:
         data = self.device_combo.currentData()
         return data if isinstance(data, GVFSMount) else None
+
+    def _on_mount_changed(self, _index: int) -> None:
+        self.browser_widget.set_mount(self.current_mount())
+
+    # Auto detection -------------------------------------------------------------
+    def _auto_monitor_devices(self) -> None:
+        if self._task_running or self.browser_widget.is_busy():
+            return
+        uris = set(list_gio_mountable_uris())
+        if uris == self._last_mountable_uris:
+            return
+        self._last_mountable_uris = uris
+        if uris:
+            self.mount_devices()
+        else:
+            self.refresh_devices()
 
     # Button slots ---------------------------------------------------------------
     def reset_helpers(self) -> None:
@@ -294,11 +316,13 @@ class MainWindow(QMainWindow):
         self.device_combo.clear()
         if not mounts:
             self.device_combo.setPlaceholderText("No GVFS mounts detected")
+            self.browser_widget.set_mount(None)
             return
         for mount in mounts:
             label = f"{mount.display_name} ({mount.path.name})"
             self.device_combo.addItem(label, userData=mount)
         self.device_combo.setCurrentIndex(0)
+        self.browser_widget.set_mount(self.current_mount())
 
 
 def run() -> None:
