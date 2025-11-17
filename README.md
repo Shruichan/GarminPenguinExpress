@@ -32,3 +32,9 @@ python3 -m garmin_penguin_express
 - `gio`, `gvfs-fuse`, and `gvfs-backends` (GVFS MTP support).
 - `ffmpeg` for optional conversion.
 - Watch must expose its storage over MTP when unlocked.
+
+
+## TODO
+- Get art for the favicon
+- Figure out what might be needed for maps support
+- Start towards feature parity with GarminExpress
