@@ -4,7 +4,7 @@ Garmim Penguin Express is a PyQt based helper that allows you to interact with t
 
 ## Install & Run 
 
-- `.deb` (Ubuntu/Pop!/Debian): `sudo apt install ./garmin-penguin-express_<version>_amd64.deb`
+- `.deb` (Ubuntu/Debian based): `sudo apt install ./garmin-penguin-express_<version>_amd64.deb`
 - AppImage: `chmod +x GarminPenguinExpress-<version>-x86_64.AppImage && ./GarminPenguinExpress-<version>-x86_64.AppImage`
 - `.rpm` (Fedora/RHEL): `sudo dnf install garmin-penguin-express-<version>.rpm`
 - Arch-based: build/install the PKGBUILD under `dist/arch/garmin-penguin-express-bin/` via `makepkg -si`
