@@ -11,6 +11,11 @@ Garmim Penguin Express is a PyQt based helper that allows you to interact with t
 
 Once installed, launch **Garmin Penguin Express** from your desktop menu (or run `GarminPenguinExpress` in a terminal). Plug the watch in, press **Mount via gio**, if it isnt automatically detected/mounted.
 
+## How to contribute
+
+- Make a branch and implement a feature you think is relevant then submit a pull request after testing
+- Make a file dump of your watches file system, and upload either a mega or zip containing the structure and some example files to the, Watch_Filesystem folder on this repository
+
 ## Develop locally
 
 ```bash
@@ -38,3 +43,5 @@ python3 -m garmin_penguin_express
 - Get art for the favicon
 - Figure out what might be needed for maps support
 - Start towards feature parity with GarminExpress
+- Bluetooth passthrough of some kind for watches with broken bluetooth chips
+- Activitiy/workout creation and upload to watch
