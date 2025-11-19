@@ -46,6 +46,5 @@ python3 -m garmin_penguin_express
 - Bluetooth passthrough of some kind for watches with broken bluetooth chips
 - Activitiy/workout creation and upload to watch
 
-## Roadmap / Design Notes
-- [docs/bluetooth_passthrough_plan.md](docs/bluetooth_passthrough_plan.md) captures the upcoming Bluetooth passthrough work and the Activities & Workouts tab that will handle activity uploads, workout creation, and calendar management.
+
 

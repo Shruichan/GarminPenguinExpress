@@ -19,11 +19,13 @@ from PyQt6.QtWidgets import (
     QMessageBox,
     QPushButton,
     QPlainTextEdit,
+    QTabWidget,
     QVBoxLayout,
     QWidget,
 )
 
 from .config_store import UserPreferences, load_preferences, save_preferences
+from .activities_tab import ActivitiesTab
 from .explorer import FileBrowserWidget
 from .sync_service import (
     copy_library_to_watch,
@@ -63,9 +65,11 @@ class MainWindow(QMainWindow):
     # UI helpers -----------------------------------------------------------------
     def _build_ui(self) -> None:
         central = QWidget()
-        main_layout = QVBoxLayout()
+        outer_layout = QVBoxLayout()
+        self.tab_widget = QTabWidget()
+        music_tab = QWidget()
+        music_layout = QVBoxLayout()
 
-        # Controls layout
         controls = QGridLayout()
         controls.setColumnStretch(1, 1)
 
@@ -114,23 +118,26 @@ class MainWindow(QMainWindow):
             button_row.addWidget(btn)
         controls.addLayout(button_row, 2, 0, 1, 3)
 
-        main_layout.addLayout(controls)
+        music_layout.addLayout(controls)
 
         # Dual-pane browser
         self.browser_widget = FileBrowserWidget(self, self.append_log, lambda: self.auto_convert_checkbox.isChecked())
-        main_layout.addWidget(self.browser_widget, 1)
+        music_layout.addWidget(self.browser_widget, 1)
 
-        # Log console
+        music_tab.setLayout(music_layout)
+        self.tab_widget.addTab(music_tab, "Music")
+        self.activities_tab = ActivitiesTab(self, self.append_log)
+        self.tab_widget.addTab(self.activities_tab, "Activities & Workouts")
+
+        outer_layout.addWidget(self.tab_widget, 1)
+
+        # Log console shared across tabs
+        outer_layout.addWidget(QLabel("Log"))
         self.log_view = QPlainTextEdit()
         self.log_view.setReadOnly(True)
-        main_layout.addWidget(QLabel("Log"))
-        main_layout.addWidget(self.log_view)
+        outer_layout.addWidget(self.log_view)
 
-        main_layout.setStretch(0, 0)
-        main_layout.setStretch(1, 1)
-        main_layout.setStretch(2, 0)
-
-        central.setLayout(main_layout)
+        central.setLayout(outer_layout)
         self.setCentralWidget(central)
 
         self.action_buttons = [
@@ -164,6 +171,7 @@ class MainWindow(QMainWindow):
         self.preferences.last_selected_watch = profile.identifier
         save_preferences(self.preferences)
         self.browser_widget.set_profile(profile)
+        self.activities_tab.set_profile(profile)
 
     def _on_auto_convert_toggled(self, _state: int) -> None:
         self.preferences.auto_convert_to_mp3 = self.auto_convert_checkbox.isChecked()
@@ -222,6 +230,7 @@ class MainWindow(QMainWindow):
 
     def _on_mount_changed(self, _index: int) -> None:
         self.browser_widget.set_mount(self.current_mount())
+        self.activities_tab.set_mount(self.current_mount())
 
     # Auto detection -------------------------------------------------------------
     def _auto_monitor_devices(self) -> None:
@@ -323,6 +332,7 @@ class MainWindow(QMainWindow):
             self.device_combo.addItem(label, userData=mount)
         self.device_combo.setCurrentIndex(0)
         self.browser_widget.set_mount(self.current_mount())
+        self.activities_tab.set_mount(self.current_mount())
 
 
 def run() -> None:

@@ -11,6 +11,8 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
     "PyQt6>=6.6",
+    "garminconnect>=0.2.34",
+    "fitparse>=1.2.0",
 ]
 
 [project.scripts]
